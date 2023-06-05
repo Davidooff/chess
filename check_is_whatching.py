@@ -29,10 +29,6 @@ def is_watching(coordinate, color, board, youre_color):  # coordinate = {x,y}
             if piece == "b" or piece == "q":
                 return True
             if piece == "p":
-                print("bishop: " +
-                      str(coordinate["x"]) + " " + str(coordinate["y"]))
-                print("diagonal: " + str(diagonal_way["y"]))
-                print(piece_color)
                 if youre_color == "white":
                     a = -1
                 else:
@@ -44,5 +40,3 @@ def is_watching(coordinate, color, board, youre_color):  # coordinate = {x,y}
                     if coordinate["y"] - a == diagonal_way["y"]:
                         return True
     return False
-
-    # horizontal_posible_ways = check_vertical_and_horizontal(coordinate["x"], coordinate["y"], piece_color, board)

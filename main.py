@@ -10,7 +10,6 @@ dictionaryOfPices = {
 browser = webdriver.Firefox()
 browser.get('https://www.chess.com/play/computer')
 youre_color = ''
-# input("Press Enter to continue...")
 
 
 def main():
@@ -65,10 +64,11 @@ def main():
         browser.execute_script(data)
 
     while True:
-
         if isChanged(pieces):
             print('Changed')
             newHighlights = []
+            removeHighlights(browser)
+            sleep(0.5)
             removeHighlights(browser)
             list_of_colors_keys = list(dictionaryOfPices.keys())
             for color in list_of_colors_keys:
@@ -97,7 +97,6 @@ def main():
             for highlight in newHighlights:
                 addHighlight(
                     browser, highlight['x'], highlight['y'], "yellow")
-        sleep(0.5)
 
 
 def setColor(color):
@@ -129,6 +128,7 @@ getColor()
 while True:
     try:
         main()
+        sleep(0.5)
     except:
         print("Catch error")
         getColor()
