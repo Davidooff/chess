@@ -1,34 +1,48 @@
 from pieces_logic import check_vertical_and_horizontal, check_diagonal, knight, get_enemy_color
 
-def is_watching(coordinate, color, board): #coordinate = {x,y}
-    global check_diagonal, knight
-    color_inversed = get_enemy_color(color) # bks every def bottom inverting color for logic
-    vertical_and_horizontals = check_vertical_and_horizontal(coordinate["x"], coordinate["y"], color_inversed, board)
-    for vertical_and_horizontal in vertical_and_horizontals:
-        piece = board[color]["square-" + str(vertical_and_horizontal["x"]) + str(vertical_and_horizontal["y"])]
-        if piece == "q" and piece == "r":
-            return True
-    
-    check_diagonals = check_diagonal(coordinate["x"], coordinate["y"], color_inversed, board)
-    
-    for check_diagonal in check_diagonals:
-        piece = board[color]["square-" + str(check_diagonal["x"]) + str(check_diagonal["y"])]
-        if piece == "q" and piece == "b":
-            return True
-        if piece == "p":
-            if color == "white":
-                if str(check_diagonal["y"]) == check_diagonal["y"] + 1:
-                    return True
-            else:
-                if str(check_diagonal["y"]) == check_diagonal["y"] - 1:
-                    return True
-    
-    knights = knight(coordinate["x"], coordinate["y"], color_inversed, board)
 
-    for knight in knights:
-        piece = board[color]["square-" + str(knight["x"]) + str(knight["y"])]
-        if piece == "n":
-            return True
-        
+def is_watching(coordinate, color, board, youre_color):  # coordinate = {x,y}
+    global check_vertical_and_horizontal, check_diagonal
+    piece_color = get_enemy_color(color)
+    knight_posible_ways = knight(
+        coordinate["x"], coordinate["y"], color, board)
+    for posible_way in knight_posible_ways:
+        if "square-" + str(posible_way["x"]) + str(posible_way["y"]) in board[piece_color]:
+            if board[piece_color]["square-" + str(posible_way["x"]) + str(posible_way["y"])] == "n":
+                return True
 
+    horizontal_ways = check_vertical_and_horizontal(
+        coordinate["x"], coordinate["y"], color, board)
+    for horizontal_way in horizontal_ways:
+        if "square-" + str(horizontal_way["x"]) + str(horizontal_way["y"]) in board[piece_color]:
+            piece = board[piece_color]["square-" +
+                                       str(horizontal_way["x"]) + str(horizontal_way["y"])]
+            if piece == "r" or piece == "q":
+                return True
+
+    diagonal_ways = check_diagonal(
+        coordinate["x"], coordinate["y"], color, board)
+    for diagonal_way in diagonal_ways:
+        if "square-" + str(diagonal_way["x"]) + str(diagonal_way["y"]) in board[piece_color]:
+            piece = board[piece_color]["square-" +
+                                       str(diagonal_way["x"]) + str(diagonal_way["y"])]
+            if piece == "b" or piece == "q":
+                return True
+            if piece == "p":
+                print("bishop: " +
+                      str(coordinate["x"]) + " " + str(coordinate["y"]))
+                print("diagonal: " + str(diagonal_way["y"]))
+                print(piece_color)
+                if youre_color == "white":
+                    a = -1
+                else:
+                    a = 1
+                if piece_color == "white":
+                    if coordinate["y"] + a == diagonal_way["y"]:
+                        return True
+                else:
+                    if coordinate["y"] - a == diagonal_way["y"]:
+                        return True
     return False
+
+    # horizontal_posible_ways = check_vertical_and_horizontal(coordinate["x"], coordinate["y"], piece_color, board)
